@@ -4,68 +4,76 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Masters Draft 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #1a3a1a;
+      font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f0ede8;
       min-height: 100vh;
-      padding-bottom: 40px;
+      padding-bottom: 48px;
     }
 
     /* ── Header ── */
     header {
-      background: #1a3a1a;
-      color: #d4af37;
+      background: #fff;
+      border-bottom: 3px solid #006747;
       text-align: center;
-      padding: 28px 16px 18px;
-      border-bottom: 2px solid #d4af37;
+      padding: 22px 16px 16px;
     }
 
     header h1 {
-      font-size: 1.6rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 1.9rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      color: #006747;
+      letter-spacing: 0.01em;
     }
 
     #tournament-name {
-      font-size: 0.8rem;
-      color: #b8a060;
-      margin-top: 4px;
-      letter-spacing: 0.05em;
+      font-size: 0.72rem;
+      color: #888;
+      margin-top: 5px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      font-weight: 600;
     }
 
     #meta {
-      font-size: 0.75rem;
-      color: #8aaa7a;
-      margin-top: 6px;
+      font-size: 0.73rem;
+      color: #C9A84C;
+      margin-top: 5px;
+      font-weight: 400;
     }
 
     /* ── Main content ── */
     main {
       max-width: 560px;
-      margin: 24px auto 0;
+      margin: 28px auto 0;
       padding: 0 12px;
     }
 
     /* ── Leaderboard card ── */
     .card {
       background: #fff;
-      border-radius: 10px;
+      border-radius: 2px;
       overflow: hidden;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      border-top: 3px solid #006747;
     }
 
     .card-header {
       display: grid;
       grid-template-columns: 36px 1fr 72px;
-      background: #2d5a27;
-      color: #d4af37;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+      background: #006747;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       padding: 9px 14px;
     }
@@ -76,82 +84,91 @@
       display: grid;
       grid-template-columns: 36px 1fr 72px;
       padding: 14px 14px;
-      border-bottom: 1px solid #efefef;
+      border-bottom: 1px solid #f0ede8;
       cursor: pointer;
       transition: background 0.12s;
       align-items: center;
     }
 
     .lb-row:last-child { border-bottom: none; }
-    .lb-row:hover { background: #f4f8f4; }
-    .lb-row.active { background: #eaf2ea; border-left: 3px solid #2d5a27; }
+    .lb-row:hover { background: #fafaf8; }
+    .lb-row.active { background: #f5f9f6; border-left: 3px solid #006747; }
 
     .lb-pos {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: #888;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #aaa;
     }
 
     .lb-name {
+      font-family: 'Playfair Display', Georgia, serif;
       font-size: 1rem;
       font-weight: 600;
       color: #1a1a1a;
     }
 
     .lb-score {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
       text-align: right;
+      font-family: 'Source Sans 3', sans-serif;
     }
 
     .score-under { color: #c0392b; }
-    .score-over  { color: #2c3e50; }
-    .score-even  { color: #2d5a27; }
+    .score-over  { color: #333; }
+    .score-even  { color: #006747; }
 
     /* ── Team detail card ── */
     #team-detail {
       display: none;
-      margin-top: 14px;
+      margin-top: 12px;
     }
 
     #team-detail.visible { display: block; }
 
     .detail-header {
-      background: #2d5a27;
-      color: #d4af37;
+      background: #006747;
+      color: #fff;
       padding: 12px 14px;
       display: flex;
       align-items: center;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 1rem;
+      font-weight: 600;
     }
 
     .detail-header .sweeper-score {
       margin-left: 8px;
-      font-size: 0.85rem;
-      color: #b8a060;
+      font-size: 0.8rem;
+      color: #C9A84C;
+      font-family: 'Source Sans 3', sans-serif;
+      font-style: normal;
+      font-weight: 400;
     }
 
     .close-btn {
       margin-left: auto;
       cursor: pointer;
-      font-size: 1.1rem;
-      color: #b8a060;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.6);
       line-height: 1;
       padding: 2px 4px;
+      font-style: normal;
+      font-family: 'Source Sans 3', sans-serif;
     }
 
-    .close-btn:hover { color: #d4af37; }
+    .close-btn:hover { color: #fff; }
 
     /* ── Golfer row ── */
     .golfer-row {
       padding: 12px 14px;
-      border-bottom: 1px solid #efefef;
+      border-bottom: 1px solid #f0ede8;
       background: #fff;
     }
 
     .golfer-row:last-child { border-bottom: none; }
-    .golfer-row.is-captain { background: #fffdf3; }
+    .golfer-row.is-captain { background: #fdfbf5; border-left: 2px solid #C9A84C; }
 
     .golfer-top {
       display: flex;
@@ -161,60 +178,60 @@
     }
 
     .golfer-name {
-      font-size: 0.93rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: #1a1a1a;
     }
 
     .badge {
-      font-size: 0.6rem;
-      font-weight: 800;
+      font-size: 0.58rem;
+      font-weight: 700;
       padding: 2px 6px;
-      border-radius: 3px;
-      letter-spacing: 0.05em;
+      border-radius: 2px;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
     .badge-captain {
-      background: #d4af37;
-      color: #1a1a1a;
+      background: #C9A84C;
+      color: #fff;
     }
 
     .badge-cut {
-      background: #e74c3c;
+      background: #c0392b;
       color: #fff;
     }
 
     .badge-wd {
-      background: #95a5a6;
+      background: #aaa;
       color: #fff;
     }
 
     /* ── Round scores ── */
     .rounds {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       flex-wrap: wrap;
     }
 
     .round-pill {
-      background: #f4f4f4;
-      border-radius: 6px;
+      background: #f5f5f2;
+      border-radius: 2px;
       padding: 4px 8px;
       text-align: center;
       min-width: 46px;
     }
 
     .round-pill.captain-r4 {
-      background: #fff8e1;
-      border: 1px solid #d4af37;
+      background: #fdfbf0;
+      border: 1px solid #C9A84C;
     }
 
     .round-label {
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       font-weight: 700;
-      color: #999;
-      letter-spacing: 0.05em;
+      color: #aaa;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
@@ -226,12 +243,12 @@
     }
 
     .round-value.under { color: #c0392b; }
-    .round-value.over  { color: #2c3e50; }
-    .round-value.empty { color: #ccc; }
+    .round-value.over  { color: #333; }
+    .round-value.empty { color: #ddd; }
 
     .multiplier-note {
-      font-size: 0.58rem;
-      color: #b8860b;
+      font-size: 0.56rem;
+      color: #C9A84C;
       font-weight: 700;
       margin-top: 1px;
     }
@@ -239,20 +256,21 @@
     /* ── States ── */
     .loading {
       text-align: center;
-      color: #b8a060;
+      color: #aaa;
       padding: 48px 16px;
       font-size: 0.9rem;
+      background: #fff;
     }
 
     .error-card {
       background: #fff;
-      border-radius: 10px;
+      border-radius: 2px;
       padding: 28px 16px;
       text-align: center;
     }
 
     .error-card p { color: #c0392b; font-size: 0.9rem; }
-    .error-card small { color: #888; font-size: 0.78rem; margin-top: 6px; display: block; }
+    .error-card small { color: #aaa; font-size: 0.78rem; margin-top: 6px; display: block; }
   </style>
 </head>
 <body>
@@ -271,11 +289,38 @@
 </main>
 
 <script>
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * HOW THIS PAGE WORKS (overview)
+ * ═══════════════════════════════════════════════════════════════
+ *
+ * On load (and every 10 minutes):
+ *   1. fetchScores()  → calls ESPN API to get live golf scores
+ *   2. parseScores()  → extracts each golfer's total + round scores
+ *   3. calcSweeper()  → adds up each person's 4 golfers (+ captain bonus)
+ *   4. renderLeaderboard() → sorts and draws the main table
+ *
+ * On click:
+ *   toggleDetail() → expands that person's 4 golfers below the table
+ *
+ * TO UPDATE PICKS (Wednesday after draft):
+ *   - Replace golfer names in PICKS below
+ *   - Names must match ESPN exactly (check browser console for warnings)
+ *   - Leave captain as null until Saturday night
+ *
+ * TO SET CAPTAINS (Saturday night before R4):
+ *   - Change captain: null  →  captain: "Golfer Name"  for each person
+ * ═══════════════════════════════════════════════════════════════
+ */
+
 // ─────────────────────────────────────────────────────────────────
 // PICKS
-// Update golfer names before Masters week — must match ESPN exactly.
-// Set captain to a golfer's name (string) on Saturday night before R4.
-// NOTE: Special chars (Å, ø) must match ESPN's displayName exactly.
+// The 6 sweepers and their 4 golfers each.
+// captain: null  →  no bonus applied yet
+// captain: "Name"  →  that golfer's R4 score is doubled on Sunday
+//
+// ⚠️  Names must match ESPN's displayName exactly.
+//     Open browser console after loading — any mismatches show as warnings.
 // ─────────────────────────────────────────────────────────────────
 const PICKS = {
   "Simo": {
@@ -306,16 +351,24 @@ const PICKS = {
 
 // ─────────────────────────────────────────────────────────────────
 // CONFIG
-// For Masters week: if league=pga doesn't return Masters data,
-// try league=masters as the param. Verify Thursday April 9.
+// API_URL: where we get live scores from (ESPN's unofficial golf API)
+// REFRESH_MS: how often to re-fetch (10 minutes = 600,000 ms)
+//
+// ⚠️  Masters week: if scores don't load on Thursday, change
+//     league=pga  →  league=masters  in the URL below
 // ─────────────────────────────────────────────────────────────────
-const API_URL   = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga";
+const API_URL    = "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga";
 const REFRESH_MS = 10 * 60 * 1000; // 10 minutes
 
 // ─────────────────────────────────────────────────────────────────
-// STATE
+// STATE  (don't touch — managed automatically)
+// golferData:    live scores keyed by golfer name, filled by parseScores()
+// activeSweeper: which sweeper's team is currently expanded (or null)
+// nextRefreshAt: timestamp of the next auto-refresh
+// countdownTimer: the interval that ticks the countdown clock
+// lastUpdated:   when scores were last successfully fetched
 // ─────────────────────────────────────────────────────────────────
-let golferData     = {};  // { "Name": { total, rounds[], thru, status, isCut } }
+let golferData     = {};
 let activeSweeper  = null;
 let nextRefreshAt  = null;
 let countdownTimer = null;
@@ -323,15 +376,15 @@ let lastUpdated    = null;
 
 // ─────────────────────────────────────────────────────────────────
 // FETCH
+// Calls the ESPN API and kicks off the parse + render chain.
+// Runs on page load and every 10 minutes automatically.
+// If the fetch fails, shows an error in the header and retries next cycle.
 // ─────────────────────────────────────────────────────────────────
 async function fetchScores() {
   try {
     const res = await fetch(API_URL);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-
-    // Full response logged for Valero testing — inspect field names in console
-    console.log("[masters-draft] Full ESPN API response:", data);
 
     parseScores(data);
     renderLeaderboard();
@@ -348,6 +401,11 @@ async function fetchScores() {
 
 // ─────────────────────────────────────────────────────────────────
 // PARSE
+// Takes raw ESPN API data and builds the golferData lookup table:
+//   golferData["Rory McIlroy"] = { total: -8, rounds: [...], thru: "F", isCut: false }
+//
+// Also logs a warning for any golfer in PICKS not found in the API —
+// that means the name in PICKS doesn't match ESPN's spelling.
 // ─────────────────────────────────────────────────────────────────
 function parseScores(data) {
   golferData = {};
@@ -357,8 +415,6 @@ function parseScores(data) {
 
   const tournamentEl = document.getElementById("tournament-name");
   if (tournamentEl && event?.name) tournamentEl.textContent = event.name;
-
-  console.log(`[masters-draft] Parsing ${competitors.length} players from: ${event?.name}`);
 
   for (const comp of competitors) {
     const name = comp.athlete?.displayName;
@@ -393,14 +449,18 @@ function parseScores(data) {
     }
   }
 
-  console.log("[masters-draft] Parsed golfer data:", golferData);
 }
 
 // ─────────────────────────────────────────────────────────────────
 // SCORE CALCULATION
-// Captain R4 multiplier: add one extra copy of captain's R4 score.
-// This effectively doubles their R4 contribution to sweeper total.
-// Only applied once R4 data exists and captain is set.
+// Adds up a sweeper's combined score from their 4 golfers.
+//
+// Normal scoring:  total = golfer1 + golfer2 + golfer3 + golfer4
+// Captain bonus:   if R4 is live and captain is set,
+//                  add one extra copy of the captain's R4 score
+//                  (this doubles their R4 contribution)
+//
+// Example: captain shoots -4 on Sunday → counts as -8 for that sweeper
 // ─────────────────────────────────────────────────────────────────
 function calcSweeper(key) {
   const { golfers, captain } = PICKS[key];
@@ -422,6 +482,9 @@ function calcSweeper(key) {
 
 // ─────────────────────────────────────────────────────────────────
 // RENDER LEADERBOARD
+// Calculates every sweeper's score, sorts lowest-to-highest (golf),
+// and draws the main 6-row table.
+// Called after every fetch and after any click interaction.
 // ─────────────────────────────────────────────────────────────────
 function renderLeaderboard() {
   const sorted = Object.keys(PICKS)
@@ -452,6 +515,9 @@ function renderLeaderboard() {
 
 // ─────────────────────────────────────────────────────────────────
 // RENDER TEAM DETAIL
+// Draws the expanded card below the leaderboard showing a sweeper's
+// 4 golfers with their individual round-by-round scores.
+// Captain row is highlighted gold. Captain's R4 pill shows doubled score.
 // ─────────────────────────────────────────────────────────────────
 function renderDetail(key) {
   const { golfers, captain } = PICKS[key];
@@ -532,6 +598,10 @@ function renderDetail(key) {
 
 // ─────────────────────────────────────────────────────────────────
 // INTERACTIONS
+// toggleDetail(): called when a leaderboard row is clicked
+//   - if that sweeper is already open → close it
+//   - otherwise → open that sweeper's team detail
+// closeDetail(): hides the team detail card and clears the selection
 // ─────────────────────────────────────────────────────────────────
 function toggleDetail(key) {
   if (activeSweeper === key) {
@@ -550,8 +620,15 @@ function closeDetail() {
 
 // ─────────────────────────────────────────────────────────────────
 // HELPERS
+// parseToPar(): converts ESPN score strings to numbers
+//   "-8" → -8  |  "E" → 0  |  "+3" → 3
+//
+// fmtScore(): converts numbers back to display strings
+//   -8 → "-8"  |  0 → "E"  |  3 → "+3"
+//
+// fmtThru(): cleans up the "Thru" column value
+//   Shows "F" (finished), hole number (e.g. "14"), "CUT", or "–"
 // ─────────────────────────────────────────────────────────────────
-// Parses ESPN to-par display strings: "-8" → -8, "E" → 0, "+3" → 3
 function parseToPar(str) {
   if (!str || str === "-" || str === "") return 0;
   if (str === "E") return 0;
@@ -574,6 +651,9 @@ function fmtThru(raw, status) {
 
 // ─────────────────────────────────────────────────────────────────
 // COUNTDOWN + META
+// updateMeta(): updates the header line showing last updated time
+//   and countdown to next refresh (ticks every second)
+// startCountdown(): starts the 1-second interval that drives the clock
 // ─────────────────────────────────────────────────────────────────
 function updateMeta() {
   const metaEl = document.getElementById("meta");
