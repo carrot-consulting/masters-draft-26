@@ -11,3 +11,6 @@ Each player drafts 4 golfers before the tournament. Scores are pulled live from 
 - Leaderboard auto-refreshes every 10 minutes
 - Click any sweeper to see their 4 golfers and individual scores
 - Each sweeper names a captain before Sunday — that golfer's R4 score is doubled
+- If a golfer misses the cut, +5 is added to their contributing score (shown as MC)
+- If a golfer wins the tournament, -5 is applied to their contributing score (shown as WIN)
+- The Live Leaderboard tab shows the full ESPN field — your sweepstake golfers are highlighted

@@ -8,6 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --green:  #006747;
+      --gold:   #C9A84C;
+      --cream:  #f0ede8;
+      --red:    #c0392b;
+      --ink:    #1a1a1a;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -20,7 +28,7 @@
     /* ── Header ── */
     header {
       background: #fff;
-      border-bottom: 3px solid #006747;
+      border-bottom: 3px solid var(--green);
       text-align: center;
       padding: 22px 16px 16px;
     }
@@ -30,7 +38,7 @@
       font-style: italic;
       font-size: 1.9rem;
       font-weight: 700;
-      color: #006747;
+      color: var(--green);
       letter-spacing: 0.01em;
     }
 
@@ -45,7 +53,7 @@
 
     #meta {
       font-size: 0.73rem;
-      color: #C9A84C;
+      color: var(--gold);
       margin-top: 5px;
       font-weight: 400;
     }
@@ -63,13 +71,13 @@
       border-radius: 2px;
       overflow: hidden;
       box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      border-top: 3px solid #006747;
+      border-top: 3px solid var(--green);
     }
 
     .card-header {
       display: grid;
       grid-template-columns: 36px 1fr 72px;
-      background: #006747;
+      background: var(--green);
       color: #fff;
       font-size: 0.65rem;
       font-weight: 600;
@@ -84,7 +92,7 @@
       display: grid;
       grid-template-columns: 36px 1fr 72px;
       padding: 14px 14px;
-      border-bottom: 1px solid #f0ede8;
+      border-bottom: 1px solid var(--cream);
       cursor: pointer;
       transition: background 0.12s;
       align-items: center;
@@ -92,7 +100,7 @@
 
     .lb-row:last-child { border-bottom: none; }
     .lb-row:hover { background: #fafaf8; }
-    .lb-row.active { background: #f5f9f6; border-left: 3px solid #006747; }
+    .lb-row.active { background: #f5f9f6; border-left: 3px solid var(--green); }
 
     .lb-pos {
       font-size: 0.82rem;
@@ -104,7 +112,7 @@
       font-family: 'Playfair Display', Georgia, serif;
       font-size: 1rem;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--ink);
     }
 
     .lb-score {
@@ -114,9 +122,9 @@
       font-family: 'Source Sans 3', sans-serif;
     }
 
-    .score-under { color: #c0392b; }
+    .score-under { color: var(--red); }
     .score-over  { color: #333; }
-    .score-even  { color: #006747; }
+    .score-even  { color: var(--green); }
 
     /* ── Team detail card ── */
     #team-detail {
@@ -127,7 +135,7 @@
     #team-detail.visible { display: block; }
 
     .detail-header {
-      background: #006747;
+      background: var(--green);
       color: #fff;
       padding: 12px 14px;
       display: flex;
@@ -141,7 +149,7 @@
     .detail-header .sweeper-score {
       margin-left: 8px;
       font-size: 0.8rem;
-      color: #C9A84C;
+      color: var(--gold);
       font-family: 'Source Sans 3', sans-serif;
       font-style: normal;
       font-weight: 400;
@@ -154,6 +162,8 @@
       color: rgba(255,255,255,0.6);
       line-height: 1;
       padding: 2px 4px;
+      background: none;
+      border: none;
       font-style: normal;
       font-family: 'Source Sans 3', sans-serif;
     }
@@ -163,12 +173,12 @@
     /* ── Golfer row ── */
     .golfer-row {
       padding: 12px 14px;
-      border-bottom: 1px solid #f0ede8;
+      border-bottom: 1px solid var(--cream);
       background: #fff;
     }
 
     .golfer-row:last-child { border-bottom: none; }
-    .golfer-row.is-captain { background: #fdfbf5; border-left: 2px solid #C9A84C; }
+    .golfer-row.is-captain { background: #fdfbf5; border-left: 2px solid var(--gold); }
 
     .golfer-top {
       display: flex;
@@ -180,7 +190,7 @@
     .golfer-name {
       font-size: 0.92rem;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--ink);
     }
 
     .badge {
@@ -193,12 +203,17 @@
     }
 
     .badge-captain {
-      background: #C9A84C;
+      background: var(--gold);
       color: #fff;
     }
 
-    .badge-cut {
-      background: #c0392b;
+    .badge-mc {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .badge-win {
+      background: var(--gold);
       color: #fff;
     }
 
@@ -224,7 +239,7 @@
 
     .round-pill.captain-r4 {
       background: #fdfbf0;
-      border: 1px solid #C9A84C;
+      border: 1px solid var(--gold);
     }
 
     .round-label {
@@ -238,20 +253,56 @@
     .round-value {
       font-size: 0.85rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: var(--ink);
       margin-top: 1px;
     }
 
-    .round-value.under { color: #c0392b; }
+    .round-value.under { color: var(--red); }
     .round-value.over  { color: #333; }
     .round-value.empty { color: #ddd; }
+    .round-value.thru  { font-size: 0.75rem; }
 
     .multiplier-note {
       font-size: 0.56rem;
-      color: #C9A84C;
+      color: var(--gold);
       font-weight: 700;
       margin-top: 1px;
     }
+
+    .multiplier-note.mc  { color: var(--red); }
+    .multiplier-note.win { color: var(--gold); }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 2px solid var(--green);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      background: none;
+      border: none;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #aaa;
+      cursor: pointer;
+      transition: color 0.12s;
+    }
+
+    .tab.active { color: var(--green); border-bottom: 2px solid var(--green); margin-bottom: -2px; }
+    .tab:hover  { color: var(--green); }
+
+    /* ── Field leaderboard ── */
+    .field-row  { grid-template-columns: 36px 1fr 72px 60px; }
+    .field-picked { background: #f5f9f6; }
+    .field-thru { font-size: 0.78rem; color: #888; text-align: right; }
+    .field-header span:nth-child(3),
+    .field-header span:nth-child(4) { text-align: right; }
 
     /* ── States ── */
     .loading {
@@ -269,23 +320,35 @@
       text-align: center;
     }
 
-    .error-card p { color: #c0392b; font-size: 0.9rem; }
+    .error-card p { color: var(--red); font-size: 0.9rem; }
     .error-card small { color: #aaa; font-size: 0.78rem; margin-top: 6px; display: block; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>&#9971; Masters Draft 2026</h1>
+  <h1><span aria-hidden="true">&#9971;</span> Masters Draft 2026</h1>
   <div id="tournament-name"></div>
   <div id="meta">Fetching live scores...</div>
 </header>
 
+<div class="tabs">
+  <button class="tab active" data-tab="sweepstake" onclick="switchTab('sweepstake')">Sweepstake</button>
+  <button class="tab" data-tab="field" onclick="switchTab('field')">Live Leaderboard</button>
+</div>
+
 <main>
-  <div id="leaderboard-container">
-    <div class="loading">Loading scores...</div>
+  <div id="tab-sweepstake">
+    <div id="leaderboard-container">
+      <div class="loading">Loading scores...</div>
+    </div>
+    <div id="team-detail"></div>
   </div>
-  <div id="team-detail"></div>
+  <div id="tab-field" hidden>
+    <div id="field-container">
+      <div class="loading">Loading scores...</div>
+    </div>
+  </div>
 </main>
 
 <script>
@@ -323,29 +386,35 @@
 //     Open browser console after loading — any mismatches show as warnings.
 // ─────────────────────────────────────────────────────────────────
 const PICKS = {
-  "Simo": {
-    golfers: ["J.J. Spaun", "Tommy Fleetwood", "Hideki Matsuyama", "Jordan Spieth"],
-    captain: "Tommy Fleetwood"
-  },
-  "Fred": {
-    golfers: ["Matt Wallace", "Andrew Putnam", "Bud Cauley", "Tony Finau"],
-    captain: "Tony Finau"
-  },
   "Toz": {
-    golfers: ["Michael Kim", "Austin Eckroat", "Nick Taylor", "Billy Horschel"],
-    captain: "Nick Taylor"
-  },
-  "Jack E": {
-    golfers: ["Robert MacIntyre", "Si Woo Kim", "Maverick McNealy", "Thorbjørn Olesen"],
-    captain: "Robert MacIntyre"
-  },
-  "Jack W": {
-    golfers: ["Ludvig Åberg", "Kristoffer Reitan", "Sam Ryder", "Gordon Sargent"],
-    captain: "Sam Ryder"
+    team:    "The Kitsilano Thunderclappers",
+    golfers: ["Rory McIlroy", "Justin Rose", "Shane Lowry", "Sungjae Im"],
+    captain: null
   },
   "Liam": {
-    golfers: ["Andrew Novak", "Marco Penge", "Zach Bauchou", "Christo Lamprecht"],
-    captain: "Christo Lamprecht"
+    team:    "Knorcks of Augusta",
+    golfers: ["Bryson DeChambeau", "Hideki Matsuyama", "Min Woo Lee", "Russell Henley"],
+    captain: null
+  },
+  "Fred": {
+    team:    "Lions Gate Links",
+    golfers: ["Cam Young", "Tommy Fleetwood", "Akshay Bhatia", "Adam Scott"],
+    captain: null
+  },
+  "JW": {
+    team:    "The Wright on Par",
+    golfers: ["Scottie Scheffler", "Bob MacIntyre", "Chris Gotterup", "Collin Morikawa"],
+    captain: null
+  },
+  "OJ": {
+    team:    "Moneyballs GC",
+    golfers: ["Jon Rahm", "Matt Fitzpatrick", "Brooks Koepka", "Jordan Spieth"],
+    captain: null
+  },
+  "Simo": {
+    team:    "Le Bloc Simo",
+    golfers: ["Ludvig Åberg", "Xander Schauffele", "Patrick Reed", "Si Woo Kim"],
+    captain: null
   }
 };
 
@@ -370,6 +439,7 @@ const REFRESH_MS = 10 * 60 * 1000; // 10 minutes
 // ─────────────────────────────────────────────────────────────────
 let golferData     = {};
 let activeSweeper  = null;
+let activeTab      = 'sweepstake';
 let nextRefreshAt  = null;
 let countdownTimer = null;
 let lastUpdated    = null;
@@ -437,6 +507,7 @@ function parseScores(data) {
       thru:         fmtThru(thruRaw, statusStr),
       isCut:        /CUT/.test(statusStr),
       isWD:         /WITHDRAWN|WD/.test(statusStr),
+      isWinner:     comp.winner === true,
     };
   }
 
@@ -459,15 +530,20 @@ function parseScores(data) {
 // Captain bonus:   if R4 is live and captain is set,
 //                  add one extra copy of the captain's R4 score
 //                  (this doubles their R4 contribution)
-//
-// Example: captain shoots -4 on Sunday → counts as -8 for that sweeper
+// MC penalty:      +5 added to any golfer who misses the cut
+// Winner bonus:    -5 applied if a golfer wins the tournament
+//                  (ESPN sets comp.winner = true only when event is final)
 // ─────────────────────────────────────────────────────────────────
 function calcSweeper(key) {
   const { golfers, captain } = PICKS[key];
 
   let total = 0;
   for (const name of golfers) {
-    total += golferData[name]?.total ?? 0;
+    const g = golferData[name];
+    let score = g?.total ?? 0;
+    if (g?.isCut)    score += 5;  // MC penalty
+    if (g?.isWinner) score -= 5;  // Winner bonus
+    total += score;
   }
 
   if (captain && golferData[captain]) {
@@ -500,7 +576,7 @@ function renderLeaderboard() {
     const cls    = score < 0 ? "score-under" : score > 0 ? "score-over" : "score-even";
     const active = key === activeSweeper ? "active" : "";
     html += `
-      <div class="lb-row ${active}" onclick="toggleDetail('${key}')">
+      <div class="lb-row ${active}" role="button" tabindex="0" onclick="toggleDetail('${key}')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDetail('${key}')">
         <span class="lb-pos">${i + 1}</span>
         <span class="lb-name">${key}</span>
         <span class="lb-score ${cls}">${fmtScore(score)}</span>
@@ -511,6 +587,7 @@ function renderLeaderboard() {
   document.getElementById("leaderboard-container").innerHTML = html;
 
   if (activeSweeper) renderDetail(activeSweeper);
+  if (activeTab === 'field') renderFieldLeaderboard();
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -520,45 +597,52 @@ function renderLeaderboard() {
 // Captain row is highlighted gold. Captain's R4 pill shows doubled score.
 // ─────────────────────────────────────────────────────────────────
 function renderDetail(key) {
-  const { golfers, captain } = PICKS[key];
+  const { team, golfers, captain } = PICKS[key];
   const sweeperScore = calcSweeper(key);
   const detailEl = document.getElementById("team-detail");
 
   let html = `
     <div class="card">
       <div class="detail-header">
-        ${key}'s Team
-        <span class="sweeper-score">${fmtScore(sweeperScore)} combined</span>
-        <span class="close-btn" onclick="closeDetail()">&#10005;</span>
+        ${team}
+        <span class="sweeper-score">${key} · ${fmtScore(sweeperScore)} combined</span>
+        <button class="close-btn" onclick="closeDetail()" aria-label="Close">&#10005;</button>
       </div>`;
 
   for (const name of golfers) {
     const g = golferData[name];
     const isCaptain = name === captain;
-    const isCut = g?.isCut ?? false;
-    const isWD  = g?.isWD  ?? false;
+    const isCut     = g?.isCut     ?? false;
+    const isWD      = g?.isWD      ?? false;
+    const isWinner  = g?.isWinner  ?? false;
 
     html += `<div class="golfer-row ${isCaptain ? "is-captain" : ""}">
       <div class="golfer-top">
         <span class="golfer-name">${name}</span>
         ${isCaptain ? `<span class="badge badge-captain">C</span>` : ""}
-        ${isCut     ? `<span class="badge badge-cut">CUT</span>` : ""}
+        ${isWinner  ? `<span class="badge badge-win">WIN</span>` : ""}
+        ${isCut     ? `<span class="badge badge-mc">MC</span>` : ""}
         ${isWD      ? `<span class="badge badge-wd">WD</span>` : ""}
       </div>
       <div class="rounds">`;
 
-    // Total pill
-    const tot = g?.total ?? 0;
-    const totCls = tot < 0 ? "under" : tot > 0 ? "over" : "";
+    // Total pill — shows adjusted score (MC +5, WIN -5 applied)
+    const rawTot = g?.total ?? 0;
+    let adjTot = rawTot;
+    let totNote = "";
+    if (isCut)    { adjTot += 5; totNote = `<div class="multiplier-note mc">+5 MC</div>`; }
+    if (isWinner) { adjTot -= 5; totNote = `<div class="multiplier-note win">-5 WIN</div>`; }
+    const totCls = adjTot < 0 ? "under" : adjTot > 0 ? "over" : "";
     html += `<div class="round-pill">
       <div class="round-label">Tot</div>
-      <div class="round-value ${totCls}">${g ? fmtScore(tot) : "–"}</div>
+      <div class="round-value ${totCls}">${g ? fmtScore(adjTot) : "–"}</div>
+      ${totNote}
     </div>`;
 
     // R1–R4 pills
     ["R1","R2","R3","R4"].forEach((label, idx) => {
       const r = g?.rounds[idx];
-      const isCaptainR4 = isCaptain && captain && idx === 3;
+      const isCaptainR4 = isCaptain && idx === 3;
 
       if (r && r.value !== null) {
         let displayVal = fmtScore(r.value);
@@ -584,7 +668,7 @@ function renderDetail(key) {
     // Thru pill
     html += `<div class="round-pill">
       <div class="round-label">Thru</div>
-      <div class="round-value" style="font-size:0.75rem">${g?.thru ?? "–"}</div>
+      <div class="round-value thru">${g?.thru ?? "–"}</div>
     </div>`;
 
     html += `</div></div>`;  // close .rounds + .golfer-row
@@ -643,10 +727,11 @@ function fmtScore(val) {
 }
 
 function fmtThru(raw, status) {
-  if (/CUT/.test(status))       return "CUT";
-  if (/WITHDRAWN|WD/.test(status)) return "WD";
-  if (!raw || raw === "-")      return "–";
-  return raw;
+  if (/CUT/.test(status))              return "CUT";
+  if (/WITHDRAWN|WD/.test(status))     return "WD";
+  if (!raw || raw === "-")             return "–";
+  if (/^\d{4}-\d{2}-\d{2}T/.test(raw)) return "–"; // tee time, not yet started
+  return raw.replace(/[<>&"]/g, "");
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -672,6 +757,63 @@ function updateMeta() {
 function startCountdown() {
   if (countdownTimer) clearInterval(countdownTimer);
   countdownTimer = setInterval(updateMeta, 1000);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// TABS
+// switchTab(): toggles between Sweepstake and Live Leaderboard views
+// ─────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('tab-sweepstake').hidden = tab !== 'sweepstake';
+  document.getElementById('tab-field').hidden = tab !== 'field';
+  if (tab === 'field') renderFieldLeaderboard();
+}
+
+// ─────────────────────────────────────────────────────────────────
+// FIELD LEADERBOARD
+// Renders the full ESPN field sorted by score (lowest first).
+// Golfers who appear in any sweeper's picks are highlighted.
+// Uses existing golferData — no extra fetch needed.
+// ─────────────────────────────────────────────────────────────────
+function renderFieldLeaderboard() {
+  const entries = Object.entries(golferData)
+    .sort((a, b) => a[1].total - b[1].total);
+
+  if (entries.length === 0) {
+    document.getElementById('field-container').innerHTML =
+      `<div class="loading">No data yet — scores will appear once the tournament starts.</div>`;
+    return;
+  }
+
+  // Names from all sweepers' picks, for row highlighting
+  const pickedNames = new Set(Object.values(PICKS).flatMap(p => p.golfers));
+
+  let html = `<div class="card">
+    <div class="card-header field-row field-header">
+      <span>#</span><span>Golfer</span><span>Score</span><span>Thru</span>
+    </div>`;
+
+  // Compute tied positions
+  let pos = 1;
+  entries.forEach(([name, g], i) => {
+    if (i > 0 && g.total !== entries[i - 1][1].total) pos = i + 1;
+    const tied    = entries.filter(([, x]) => x.total === g.total).length > 1;
+    const posStr  = tied ? `T${pos}` : `${pos}`;
+    const isPicked = pickedNames.has(name);
+    const cls     = g.total < 0 ? "score-under" : g.total > 0 ? "score-over" : "score-even";
+
+    html += `<div class="lb-row field-row ${isPicked ? "field-picked" : ""}">
+      <span class="lb-pos">${posStr}</span>
+      <span class="lb-name">${name}</span>
+      <span class="lb-score ${cls}">${fmtScore(g.total)}</span>
+      <span class="field-thru">${g.thru}</span>
+    </div>`;
+  });
+
+  html += `</div>`;
+  document.getElementById('field-container').innerHTML = html;
 }
 
 // ─────────────────────────────────────────────────────────────────
