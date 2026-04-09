@@ -178,7 +178,7 @@
     }
 
     .golfer-row:last-child { border-bottom: none; }
-    .golfer-row.is-captain { background: #fdfbf5; border-left: 2px solid var(--gold); }
+    .golfer-row.is-captain { background: #fefefe; border-left: 1px solid rgba(201,168,76,0.35); }
 
     .golfer-top {
       display: flex;
@@ -239,7 +239,8 @@
 
     .round-pill.captain-r4 {
       background: #fdfbf0;
-      border: 1px solid var(--gold);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 0 1px rgba(201,168,76,0.15);
     }
 
     .round-label {
@@ -389,32 +390,32 @@ const PICKS = {
   "Toz": {
     team:    "The Kitsilano Thunderclappers",
     golfers: ["Rory McIlroy", "Justin Rose", "Shane Lowry", "Sungjae Im"],
-    captain: null
+    captain: "Sungjae Im"
   },
   "Liam": {
     team:    "Knorcks of Augusta",
     golfers: ["Bryson DeChambeau", "Hideki Matsuyama", "Min Woo Lee", "Russell Henley"],
-    captain: null
+    captain: "Hideki Matsuyama"
   },
   "Fred": {
     team:    "Lions Gate Links",
-    golfers: ["Cam Young", "Tommy Fleetwood", "Akshay Bhatia", "Adam Scott"],
-    captain: null
+    golfers: ["Cameron Young", "Tommy Fleetwood", "Akshay Bhatia", "Adam Scott"],
+    captain: "Tommy Fleetwood"
   },
   "JW": {
     team:    "The Wright on Par",
-    golfers: ["Scottie Scheffler", "Bob MacIntyre", "Chris Gotterup", "Collin Morikawa"],
-    captain: null
+    golfers: ["Scottie Scheffler", "Robert MacIntyre", "Chris Gotterup", "Collin Morikawa"],
+    captain: "Robert MacIntyre"
   },
   "OJ": {
     team:    "Moneyballs GC",
     golfers: ["Jon Rahm", "Matt Fitzpatrick", "Brooks Koepka", "Jordan Spieth"],
-    captain: null
+    captain: "Jordan Spieth"
   },
   "Simo": {
     team:    "Le Bloc Simo",
     golfers: ["Ludvig Åberg", "Xander Schauffele", "Patrick Reed", "Si Woo Kim"],
-    captain: null
+    captain: "Patrick Reed"
   }
 };
 
@@ -452,7 +453,7 @@ let lastUpdated    = null;
 // ─────────────────────────────────────────────────────────────────
 async function fetchScores() {
   try {
-    const res = await fetch(API_URL);
+    const res = await fetch(API_URL + '&_=' + Date.now());
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
@@ -626,12 +627,14 @@ function renderDetail(key) {
       </div>
       <div class="rounds">`;
 
-    // Total pill — shows adjusted score (MC +5, WIN -5 applied)
+    // Total pill — shows adjusted score (MC +5, WIN -5, captain R4×2 applied)
     const rawTot = g?.total ?? 0;
     let adjTot = rawTot;
     let totNote = "";
-    if (isCut)    { adjTot += 5; totNote = `<div class="multiplier-note mc">+5 MC</div>`; }
-    if (isWinner) { adjTot -= 5; totNote = `<div class="multiplier-note win">-5 WIN</div>`; }
+    if (isCut)      { adjTot += 5; totNote = `<div class="multiplier-note mc">+5 MC</div>`; }
+    if (isWinner)   { adjTot -= 5; totNote = `<div class="multiplier-note win">-5 WIN</div>`; }
+    const r4val = g?.rounds[3]?.value;
+    if (isCaptain && r4val != null) { adjTot += r4val; totNote += `<div class="multiplier-note">+R4×2</div>`; }
     const totCls = adjTot < 0 ? "under" : adjTot > 0 ? "over" : "";
     html += `<div class="round-pill">
       <div class="round-label">Tot</div>
@@ -658,7 +661,7 @@ function renderDetail(key) {
           ${multiplierNote}
         </div>`;
       } else {
-        html += `<div class="round-pill">
+        html += `<div class="round-pill ${isCaptainR4 ? "captain-r4" : ""}">
           <div class="round-label">${label}</div>
           <div class="round-value empty">–</div>
         </div>`;
