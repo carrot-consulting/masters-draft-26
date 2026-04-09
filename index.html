@@ -491,7 +491,6 @@ function parseScores(data) {
     const name = comp.athlete?.displayName;
     if (!name) continue;
 
-    const totalVal  = parseToPar(comp.score?.displayValue);
     const statusStr = comp.status?.type?.name ?? "";
     const thruRaw   = comp.status?.displayValue ?? "";
 
@@ -500,6 +499,10 @@ function parseScores(data) {
       value:   parseToPar(ls.displayValue),
       display: ls.displayValue ?? "–"
     }));
+
+    // Compute total from linescores (sum of per-round scores to par).
+    // ESPN's comp.score.displayValue lags mid-round, but linescores update live.
+    const totalVal = rounds.reduce((sum, r) => sum + r.value, 0);
 
     golferData[name] = {
       total:        totalVal,
