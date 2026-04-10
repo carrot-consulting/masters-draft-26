@@ -305,6 +305,22 @@
     .field-header span:nth-child(3),
     .field-header span:nth-child(4) { text-align: right; }
 
+    /* ── Cut line ── */
+    .cut-line {
+      padding: 6px 12px;
+      background: #f7f7f7;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    .cut-line-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #999;
+      text-transform: uppercase;
+    }
+
     /* ── States ── */
     .loading {
       text-align: center;
@@ -439,6 +455,7 @@ const REFRESH_MS = 10 * 60 * 1000; // 10 minutes
 // lastUpdated:   when scores were last successfully fetched
 // ─────────────────────────────────────────────────────────────────
 let golferData     = {};
+let cutInfo        = null;  // { score: number, round: number, count: number } from ESPN tournament data
 let activeSweeper  = null;
 let activeTab      = 'sweepstake';
 let nextRefreshAt  = null;
@@ -486,6 +503,12 @@ function parseScores(data) {
 
   const tournamentEl = document.getElementById("tournament-name");
   if (tournamentEl && event?.name) tournamentEl.textContent = event.name;
+
+  // Extract cut line from tournament metadata
+  const t = event?.tournament;
+  if (t?.cutScore != null) {
+    cutInfo = { score: t.cutScore, round: t.cutRound, count: t.cutCount };
+  }
 
   for (const comp of competitors) {
     const name = comp.athlete?.displayName;
@@ -801,14 +824,24 @@ function renderFieldLeaderboard() {
       <span>#</span><span>Golfer</span><span>Score</span><span>Thru</span>
     </div>`;
 
-  // Compute tied positions
+  // Compute tied positions; insert cut line when score crosses the cut threshold
   let pos = 1;
+  let cutInserted = false;
   entries.forEach(([name, g], i) => {
     if (i > 0 && g.total !== entries[i - 1][1].total) pos = i + 1;
     const tied    = entries.filter(([, x]) => x.total === g.total).length > 1;
     const posStr  = tied ? `T${pos}` : `${pos}`;
     const isPicked = pickedNames.has(name);
     const cls     = g.total < 0 ? "score-under" : g.total > 0 ? "score-over" : "score-even";
+
+    // Insert cut line before the first player whose score exceeds the cut
+    if (!cutInserted && cutInfo != null && g.total > cutInfo.score && !g.isCut && !g.isWD) {
+      const cutLabel = fmtScore(cutInfo.score);
+      html += `<div class="cut-line">
+        <span class="cut-line-label">Projected Cut ${cutLabel}</span>
+      </div>`;
+      cutInserted = true;
+    }
 
     html += `<div class="lb-row field-row ${isPicked ? "field-picked" : ""}">
       <span class="lb-pos">${posStr}</span>
