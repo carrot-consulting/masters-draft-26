@@ -299,11 +299,14 @@
     .tab:hover  { color: var(--green); }
 
     /* ── Field leaderboard ── */
-    .field-row  { grid-template-columns: 36px 1fr 72px 60px; }
-    .field-picked { background: #f5f9f6; }
+    .field-row  { grid-template-columns: 36px 1fr 72px 52px 52px; }
+    .field-picked { background: #eaf2ec; }
     .field-thru { font-size: 0.78rem; color: #888; text-align: right; }
+    .field-today { font-size: 0.78rem; text-align: right; }
     .field-header span:nth-child(3),
-    .field-header span:nth-child(4) { text-align: right; }
+    .field-header span:nth-child(4),
+    .field-header span:nth-child(5) { text-align: right; }
+    .field-captain { font-size: 0.58rem; font-weight: 700; padding: 1px 4px; border-radius: 2px; background: var(--gold); color: #fff; margin-left: 4px; vertical-align: middle; letter-spacing: 0.06em; }
 
     /* ── Cut line ── */
     .cut-line {
@@ -406,7 +409,7 @@ const PICKS = {
   "Toz": {
     team:    "The Kitsilano Thunderclappers",
     golfers: ["Rory McIlroy", "Justin Rose", "Shane Lowry", "Sungjae Im"],
-    captain: "Sungjae Im"
+    captain: "Rory McIlroy"
   },
   "Liam": {
     team:    "Knorcks of Augusta",
@@ -421,12 +424,12 @@ const PICKS = {
   "JW": {
     team:    "The Wright on Par",
     golfers: ["Scottie Scheffler", "Robert MacIntyre", "Chris Gotterup", "Collin Morikawa"],
-    captain: "Robert MacIntyre"
+    captain: "Scottie Scheffler"
   },
   "OJ": {
     team:    "Moneyballs GC",
     golfers: ["Jon Rahm", "Matt Fitzpatrick", "Brooks Koepka", "Jordan Spieth"],
-    captain: "Jordan Spieth"
+    captain: "Brooks Koepka"
   },
   "Simo": {
     team:    "Le Bloc Simo",
@@ -514,26 +517,39 @@ function parseScores(data) {
     const name = comp.athlete?.displayName;
     if (!name) continue;
 
-    const statusStr = comp.status?.type?.name ?? "";
-    const thruRaw   = comp.status?.displayValue ?? "";
+    const statusStr    = comp.status?.type?.name ?? "";
+    const thruRaw      = comp.status?.displayValue ?? "";
+    const currentRound = comp.status?.period ?? null;
 
     // linescores: one entry per round played, parsed as score to par
     const rounds = (comp.linescores ?? []).map(ls => ({
       value:   parseToPar(ls.displayValue),
-      display: ls.displayValue ?? "–"
+      display: ls.displayValue ?? "–",
+      gross:   ls.value ?? null
     }));
 
     // Compute total from linescores (sum of per-round scores to par).
     // ESPN's comp.score.displayValue lags mid-round, but linescores update live.
     const totalVal = rounds.reduce((sum, r) => sum + r.value, 0);
 
+    // Current round gross score (for Thru column when finished)
+    const cri = (currentRound != null && currentRound > 0) ? currentRound - 1 : null;
+    const currentRoundGross = (cri != null && rounds[cri]) ? rounds[cri].gross : null;
+
+    const isCut    = /CUT/.test(statusStr);
+    const isWD     = /WITHDRAWN|WD/.test(statusStr);
+
+    // Today's score to par
+    const todayVal = (!(isCut || isWD) && cri != null && rounds[cri]) ? rounds[cri].value : null;
+
     golferData[name] = {
       total:        totalVal,
       totalDisplay: fmtScore(totalVal),
       rounds,
-      thru:         fmtThru(thruRaw, statusStr),
-      isCut:        /CUT/.test(statusStr),
-      isWD:         /WITHDRAWN|WD/.test(statusStr),
+      thru:         fmtThru(thruRaw, statusStr, currentRoundGross),
+      today:        todayVal != null ? fmtScore(todayVal) : "–",
+      isCut,
+      isWD,
       isWinner:     comp.winner === true,
     };
   }
@@ -600,7 +616,7 @@ function renderLeaderboard() {
     </div>`;
 
   sorted.forEach(({ key, score }, i) => {
-    const cls    = score < 0 ? "score-under" : score > 0 ? "score-over" : "score-even";
+    const cls    = scoreCls(score);
     const active = key === activeSweeper ? "active" : "";
     html += `
       <div class="lb-row ${active}" role="button" tabindex="0" onclick="toggleDetail('${key}')" onkeydown="if(event.key==='Enter'||event.key===' ')toggleDetail('${key}')">
@@ -636,7 +652,16 @@ function renderDetail(key) {
         <button class="close-btn" onclick="closeDetail()" aria-label="Close">&#10005;</button>
       </div>`;
 
-  for (const name of golfers) {
+  // Sort golfers: active players by score (best first), CUT/WD to the bottom
+  const sortedGolfers = [...golfers].sort((a, b) => {
+    const ga = golferData[a], gb = golferData[b];
+    const aCutWD = ga?.isCut || ga?.isWD ? 1 : 0;
+    const bCutWD = gb?.isCut || gb?.isWD ? 1 : 0;
+    if (aCutWD !== bCutWD) return aCutWD - bCutWD;
+    return (ga?.total ?? 0) - (gb?.total ?? 0);
+  });
+
+  for (const name of sortedGolfers) {
     const g = golferData[name];
     const isCaptain = name === captain;
     const isCut     = g?.isCut     ?? false;
@@ -755,12 +780,22 @@ function fmtScore(val) {
   return val > 0 ? `+${val}` : `${val}`;
 }
 
-function fmtThru(raw, status) {
+function scoreCls(val) {
+  if (val == null) return "";
+  return val < 0 ? "score-under" : val > 0 ? "score-over" : "score-even";
+}
+
+function fmtThru(raw, status, currentRoundGross) {
   if (/CUT/.test(status))              return "CUT";
   if (/WITHDRAWN|WD/.test(status))     return "WD";
   if (!raw || raw === "-")             return "–";
   if (/^\d{4}-\d{2}-\d{2}T/.test(raw)) return "–"; // tee time, not yet started
-  return raw.replace(/[<>&"]/g, "");
+  const clean = raw.replace(/[<>&"]/g, "");
+  // When finished, show gross score (e.g. 69) instead of "F"
+  if (clean === "F" || clean === "18") {
+    return currentRoundGross != null ? String(currentRoundGross) : "F";
+  }
+  return clean;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -818,21 +853,26 @@ function renderFieldLeaderboard() {
 
   // Names from all sweepers' picks, for row highlighting
   const pickedNames = new Set(Object.values(PICKS).flatMap(p => p.golfers));
+  // Captain names for badge display
+  const captainNames = new Set(Object.values(PICKS).map(p => p.captain).filter(Boolean));
 
   let html = `<div class="card">
     <div class="card-header field-row field-header">
-      <span>#</span><span>Golfer</span><span>Score</span><span>Thru</span>
+      <span>#</span><span>Golfer</span><span>Score</span><span>Thru</span><span>Today</span>
     </div>`;
 
-  // Compute tied positions; insert cut line when score crosses the cut threshold
+  // Pre-compute score frequencies for tied positions
+  const scoreCounts = {};
+  for (const [, g] of entries) scoreCounts[g.total] = (scoreCounts[g.total] || 0) + 1;
+
+  // Render rows; insert cut line when score crosses the cut threshold
   let pos = 1;
   let cutInserted = false;
   entries.forEach(([name, g], i) => {
     if (i > 0 && g.total !== entries[i - 1][1].total) pos = i + 1;
-    const tied    = entries.filter(([, x]) => x.total === g.total).length > 1;
-    const posStr  = tied ? `T${pos}` : `${pos}`;
+    const posStr   = scoreCounts[g.total] > 1 ? `T${pos}` : `${pos}`;
     const isPicked = pickedNames.has(name);
-    const cls     = g.total < 0 ? "score-under" : g.total > 0 ? "score-over" : "score-even";
+    const cls      = scoreCls(g.total);
 
     // Insert cut line before the first player whose score exceeds the cut
     if (!cutInserted && cutInfo != null && g.total > cutInfo.score && !g.isCut && !g.isWD) {
@@ -843,11 +883,15 @@ function renderFieldLeaderboard() {
       cutInserted = true;
     }
 
+    const captainBadge = captainNames.has(name) ? `<span class="field-captain">C</span>` : "";
+    const todayCls = g.today !== "–" ? scoreCls(parseToPar(g.today)) : "";
+
     html += `<div class="lb-row field-row ${isPicked ? "field-picked" : ""}">
       <span class="lb-pos">${posStr}</span>
-      <span class="lb-name">${name}</span>
+      <span class="lb-name">${name}${captainBadge}</span>
       <span class="lb-score ${cls}">${fmtScore(g.total)}</span>
       <span class="field-thru">${g.thru}</span>
+      <span class="field-today ${todayCls}">${g.today}</span>
     </div>`;
   });
 
